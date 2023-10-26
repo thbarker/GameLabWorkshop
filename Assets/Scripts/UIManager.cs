@@ -10,15 +10,15 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        victoryMenu.OnPlayerVictory += EnableVictoryMenu;
+        Victory.OnPlayerVictory += EnableVictoryMenu;
         DeathBarrier.OnPlayerDeath += EnableGameOverMenu;
     }
     private void OnDisable()
     {
-        victoryMenu.OnPlayerVictory += EnableVictoryMenu;
+        Victory.OnPlayerVictory -= EnableVictoryMenu;
         DeathBarrier.OnPlayerDeath -= EnableGameOverMenu;
     }
-
+    
     public void EnableGameOverMenu()
     {
         gameOverMenu.SetActive(true);
