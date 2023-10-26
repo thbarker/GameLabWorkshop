@@ -6,14 +6,16 @@ using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 {
     public GameObject gameOverMenu;
+    public GameObject victoryMenu;
 
     private void OnEnable()
     {
-      
+        victoryMenu.OnPlayerVictory += EnableVictoryMenu;
         DeathBarrier.OnPlayerDeath += EnableGameOverMenu;
     }
     private void OnDisable()
     {
+        victoryMenu.OnPlayerVictory += EnableVictoryMenu;
         DeathBarrier.OnPlayerDeath -= EnableGameOverMenu;
     }
 
@@ -21,9 +23,17 @@ public class UIManager : MonoBehaviour
     {
         gameOverMenu.SetActive(true);
     }
-
+    public void EnableVictoryMenu()
+    {
+        victoryMenu.SetActive(true);
+    }
     public void RestartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 }

@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class SwitchLevel : MonoBehaviour
+public class Victory : MonoBehaviour
 {
-    [SerializeField] private int sceneIndex;
+    public static event Action OnPlayerVictory;
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Player")
         {
-            SceneManager.LoadScene(sceneIndex, LoadSceneMode.Single);
+            Debug.Log("Victory");
+            OnPlayerVictory?.Invoke();
         }
     }
 }
