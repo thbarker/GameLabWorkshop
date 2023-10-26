@@ -9,13 +9,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 8f;
     [SerializeField] private float jumpPower = 16f;
     [SerializeField] private Rigidbody2D rigidBody;
-    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Transform rightGroundCheck;
+    [SerializeField] private Transform leftGroundCheck;
     [SerializeField] private LayerMask groundLayer;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        EnablePlayerMovement();
     }
 
     // Update is called once per frame
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal");
         if (isGrounded() && Input.GetButtonDown("Jump"))
         {
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpPower);
+            rigidBody.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
         }
     }
 
@@ -35,6 +36,26 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        return Physics2D.OverlapCircle(rightGroundCheck.position, 0.2f, groundLayer) || Physics2D.OverlapCircle(leftGroundCheck.position, 0.2f, groundLayer);
+    }
+
+    private void DisablePlayerMovement()
+    {
+        rigidBody.bodyType = RigidbodyType2D.Static;
+    }
+
+    private void EnablePlayerMovement()
+    {
+        rigidBody.bodyType = RigidbodyType2D.Dynamic;
+    }
+
+    private void OnEnable()
+    {
+
+        DeathBarrier.OnPlayerDeath += DisablePlayerMovement;
+    }
+    private void OnDisable()
+    {
+        DeathBarrier.OnPlayerDeath -= DisablePlayerMovement;
     }
 }
